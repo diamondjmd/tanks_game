@@ -98,9 +98,8 @@ Map::Map(const Point<float>& worldSize, const Point<float>& tileSize){
 
 void Map::initMap(const Point<float>& worldSize, const Point<float>& tileSize) {
     m_worldSize = worldSize;
-    m_tileSize=tileSize;
-    m_rows = static_cast<unsigned short>(worldSize.y / tileSize.y);
-    m_columns = static_cast<unsigned short>(worldSize.x / tileSize.x);
+    m_rows = static_cast<unsigned short>(worldSize.y / tileSize.y) + 1 ;
+    m_columns = static_cast<unsigned short>(worldSize.x / tileSize.x) + 1;
     
     if (!m_tileTexture.loadFromFile("../resources/textures/map/tiles.png")) {
         std::cerr << "Could not load the Tile textures in the Map\n";
@@ -109,7 +108,6 @@ void Map::initMap(const Point<float>& worldSize, const Point<float>& tileSize) {
     if (!m_obstacleTexture.loadFromFile("../resources/textures/map/obstacles.png")) {
         std::cerr << "Could not load the Obstacles textures in the Map\n";
     } 
-
 
     m_tileTexture.setSmooth(false);
     m_tileSprite.setTexture(m_tileTexture);
@@ -151,8 +149,6 @@ Point<float> Map::getWorldSize() const{
 
 // Actions
 void Map::draw(Painter& painter) const {
-   // painter.draw(*this, m_tileSprite);
-
     for (const auto& tiles: m_tiles) {
         for (const auto& tile: tiles) {
             painter.draw(tile, tile.getType(), tile.getRotation() ,m_tileSprite);
@@ -162,5 +158,4 @@ void Map::draw(Painter& painter) const {
     for (const auto& obstacle: m_obstacles) {
        painter.draw(obstacle, obstacle.getType(), obstacle.getRotation() , m_obstacleSprite);
     }
-
 }

@@ -32,6 +32,7 @@ void Application::run(World& world) {
     CacheManager::loadTexturesFrom("../resources/textures");
     m_time = std::chrono::system_clock::now();
   
+    //Game loop
     while (window.isOpen()) {
         processEvents(world);
         updateWorld(world);

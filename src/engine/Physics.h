@@ -17,17 +17,43 @@ class Physics {
   public:
     Physics(double timePerTick = 0.001);
     void setWorldBox(const Point<float>& worldSize);
-    void update(std::unordered_map<std::string, Player>& players, std::vector<Bullet>& bullets, AnimationManager& animations, const std::vector<Obstacle>& obstacles, const size_t ticks);
+    void update(std::unordered_map<std::string, Player>& players, 
+                std::vector<Bullet>& bullets, 
+                AnimationManager& animations, 
+                const std::vector<Obstacle>& obstacles, 
+                const size_t ticks);
   
-  private:
+  private: //helpers
     bool isCollidingWithBox(const Point<float>& position, Point<float> size) const;
-    bool collidingWithObjs(const Rect& obj, const std:: string& playerName, const std::unordered_map<std::string, Player>& players, const std::vector<Obstacle>& obstacles) const;
+
+    bool collidingWithObjs(const Rect& obj, 
+                            const std:: string& playerName, 
+                            const std::unordered_map<std::string, Player>& players, 
+                            const std::vector<Obstacle>& obstacles) const;
     
-    void move(std::unordered_map<std::string, Player>& players, const std::vector<Obstacle>& obstacles) const;
+    void move(std::unordered_map<std::string, Player>& players, 
+              const std::vector<Obstacle>& obstacles) const;
   
     void move(std::vector<Bullet>& bullets) const;
-    void collideBullets(std::vector<Bullet>& bullets, std::unordered_map<std::string, Player>& players, const std::vector<Obstacle>& obstacles, AnimationManager& Animations) const;
-    void processBulletCollisions(const Bullet& bullet, const std::string& playerName ,std::unordered_map<std::string, Player>& players, AnimationManager& animations) const;
+
+    // returns true if the bullet is colliding with a player, false otherwise
+    bool isBulletCollidingPlayer(const Bullet &bullet, 
+                                std::unordered_map<std::string, Player>& players, 
+                                AnimationManager& animations) const;
+    
+    bool isBulletCollidingObstacle(const Bullet &bullet, 
+                                    const std::vector<Obstacle>& obstacles, 
+                                    AnimationManager& animations) const;
+
+    void collideBullets(std::vector<Bullet>& bullets, 
+                        std::unordered_map<std::string, Player>& players, 
+                        const std::vector<Obstacle>& obstacles, 
+                        AnimationManager& Animations) const;
+
+    void processBulletCollisions(const Bullet& bullet, 
+                                  const std::string& playerName,
+                                  std::unordered_map<std::string, Player>& players, 
+                                  AnimationManager& animations) const;
  
   private:
     Point<float> m_worldSize;

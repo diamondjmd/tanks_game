@@ -13,7 +13,11 @@ void Physics::setWorldBox(const Point<float>& worldSize) {
 }
 
 
-void Physics::update(std::unordered_map<std::string, Player>& players, std::vector<Bullet>& bullets, AnimationManager& animations, const std::vector<Obstacle>& obstacles, const size_t ticks){
+void Physics::update(std::unordered_map<std::string, Player>& players, 
+                        std::vector<Bullet>& bullets, AnimationManager& animations, 
+                        const std::vector<Obstacle>& obstacles, 
+                        const size_t ticks){
+
     for (size_t i = 0; i < ticks; ++i) {
         move(bullets);
         move(players, obstacles);
@@ -22,7 +26,9 @@ void Physics::update(std::unordered_map<std::string, Player>& players, std::vect
     }
 } 
 
-void Physics::move(std::unordered_map<std::string, Player>& players,const std::vector<Obstacle>& obstacles) const {
+void Physics::move(std::unordered_map<std::string, Player>& players,
+                    const std::vector<Obstacle>& obstacles) const {
+
     for (auto& [playerName, player]: players) {
         if(player.isAlive()){
             auto tank = player.getTank();
@@ -34,7 +40,7 @@ void Physics::move(std::unordered_map<std::string, Player>& players,const std::v
             if (startPos != endPos){
                 tank.move(endPos);
 
-                //check collision
+                //check collisions
                 if (isCollidingWithBox(endPos, tank.getSize())  ||
                     collidingWithObjs(tank, playerName, players, obstacles)){
                     tank.move(startPos);
@@ -48,48 +54,55 @@ void Physics::move(std::unordered_map<std::string, Player>& players,const std::v
 
  void Physics::move(std::vector<Bullet>& bullets) const{
     for(auto &bullet: bullets){
-        bullet.setPosition(bullet.getPosition() + bullet.getDirection() * bullet.getSpeed() * m_timePerTick);
+        bullet.setPosition(bullet.getPosition() + bullet.getDirection()
+                            * static_cast<float>(bullet.getSpeed() * m_timePerTick));
     }
  }
+bool Physics::isBulletCollidingPlayer(const Bullet &bullet, 
+                                    std::unordered_map<std::string, Player>& players,
+                                    AnimationManager& animations) const {
+    
+    for (auto& [playerName, player]: players) { 
+        if (player.isAlive() && 
+            playerName != bullet.getShooterName()){
 
-  void Physics::collideBullets(std::vector<Bullet>& bullets, std::unordered_map<std::string, Player>& players, const std::vector<Obstacle>& obstacles, AnimationManager& animations) const{
-        bool isDeleted;
-        auto bullet = bullets.begin();
-        
-        while (bullet != bullets.end()){
-            isDeleted = false;
-            if (isCollidingWithBox(bullet->getPosition(), bullet->getSize())){
-                bullet = bullets.erase(bullet);
-                isDeleted = true;
-            }else{
-                // check collision with players
-               for (auto& [playerName, player]: players) { 
-                    if (player.isAlive() && 
-                        playerName != bullet->getShooterName()){
+            if (bullet.hasPenetrated(player.getTank())){
+                processBulletCollisions(bullet, playerName, players, animations);
+                return true;
 
-                        if (bullet->hasPenetrated(player.getTank())){
-                            processBulletCollisions(*bullet, playerName, players, animations);
-                            
-                            bullet = bullets.erase(bullet);
-                            isDeleted = true;
-                            break;
-                        }
-                    }
-                }
-
-                if (!isDeleted){
-                    for (const auto& obstacle: obstacles) {
-                        if (bullet->isCollidingWith(obstacle)) {
-                            animations.createAnimation(AnimationManager::Animate::Impact, bullet->getPosition(),bullet->getRotation());
-                            bullet = bullets.erase(bullet);
-                            isDeleted = true;
-                            break;
-                        }
-                    }
-                }
             }
+        }
+    }
+    return false;
+}
 
-            if (!isDeleted){
+bool Physics::isBulletCollidingObstacle(const Bullet &bullet, 
+                                            const std::vector<Obstacle>& obstacles, 
+                                            AnimationManager& animations) const {
+    
+    for (const auto& obstacle: obstacles) {
+        if (bullet.hasPenetrated(obstacle)) {
+            animations.createAnimation(AnimationManager::Animate::Impact, bullet.getPosition(), bullet.getRotation());
+            return true;
+        }
+    }
+    return false;
+}
+
+void Physics::collideBullets(std::vector<Bullet>& bullets, 
+                                std::unordered_map<std::string, Player>& players, 
+                                const std::vector<Obstacle>& obstacles, 
+                                AnimationManager& animations) const{
+        
+        auto bullet = bullets.begin();
+        while (bullet != bullets.end()){ 
+            //check collisions
+            if (isCollidingWithBox(bullet->getPosition(), bullet->getSize()) ||
+                isBulletCollidingPlayer(*bullet,  players, animations) ||
+                isBulletCollidingObstacle(*bullet, obstacles, animations)){
+                    
+                    bullet = bullets.erase(bullet);
+            }else{
                 ++bullet;
             }
         }
@@ -98,10 +111,10 @@ void Physics::move(std::unordered_map<std::string, Player>& players,const std::v
 bool Physics::isCollidingWithBox(const Point<float>& position,  Point<float> size) const {
     size = size / 2.f;
     // Check if the tank's bounding box extends beyond the world boundaries
-    bool isCollidingWithLeftBound = position.x - size.x< 0;
-    bool isCollidingWithRightBound = position.x + size.x > m_worldSize.x;
-    bool isCollidingWithTopBound = position.y - size.y< 0;
-    bool isCollidingWithBottomBound = position.y + size.y > m_worldSize.y;
+    bool isCollidingWithLeftBound = (position.x - size.x) < 0;
+    bool isCollidingWithRightBound = (position.x + size.x) > m_worldSize.x;
+    bool isCollidingWithTopBound = (position.y - size.y) < 0;
+    bool isCollidingWithBottomBound = (position.y + size.y) > m_worldSize.y;
     // Determine if any of the bounding box edges are outside the world boundaries
     return isCollidingWithLeftBound || isCollidingWithRightBound || isCollidingWithTopBound || isCollidingWithBottomBound;
 }

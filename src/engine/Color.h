@@ -20,7 +20,7 @@ namespace graphs {
         if (color < Count){
             return static_cast<int>(color);
         }
-        return static_cast<int>(color);
+        return 0;
     }
 
     // Function to convert int to enum
@@ -28,7 +28,7 @@ namespace graphs {
         if (value < Count){
             return static_cast<Color>(value);
         }
-        return Color::Beige;
+        return Color::Blue;
     }
 
 }; // end namespace game
