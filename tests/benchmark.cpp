@@ -2,13 +2,12 @@
 #include <chrono>
 #include <cmath>
 
-// Define your Point class
 template <typename T>
 struct Point {
     T x, y;
 };
 
-// Your normalize function
+
 template <typename T>
 inline Point<T> normalize(const Point<T>& vector) {
     T magnitude = std::sqrt(vector.x * vector.x + vector.y * vector.y);
@@ -18,7 +17,7 @@ inline Point<T> normalize(const Point<T>& vector) {
     return {static_cast<T>(1.0), static_cast<T>(0.0)};
 }
 
-// Your rotatePoint function
+
 template <typename T>
 inline Point<T> rotatePoint(const Point<T>& p, double thetaDegrees) {
     auto thetaRadians = thetaDegrees * M_PI / 180.0;

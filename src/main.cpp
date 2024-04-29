@@ -13,9 +13,7 @@ int main(){
     Application app("Tanks", worldSize.x, worldSize.y);
     
 
-    //DELETE
     //World world{worldSize};
-    //World world{"../resources/maps/map_default.json"};
     World world{"../resources/maps/map_1.json"};
     
     if (world.addPlayer(player)) {
