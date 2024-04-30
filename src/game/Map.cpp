@@ -98,6 +98,7 @@ Map::Map(const Point<float>& worldSize, const Point<float>& tileSize){
 
 void Map::initMap(const Point<float>& worldSize, const Point<float>& tileSize) {
     m_worldSize = worldSize;
+    m_tileSize = tileSize;
     m_rows = static_cast<unsigned short>(worldSize.y / tileSize.y) + 1 ;
     m_columns = static_cast<unsigned short>(worldSize.x / tileSize.x) + 1;
     

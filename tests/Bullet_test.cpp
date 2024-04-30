@@ -32,8 +32,8 @@ TEST_F(BulletTest, ConstructorWithDefaultValues) {
     EXPECT_EQ(bullet.getPosition(), position);
     EXPECT_EQ(bullet.getDirection(), normalize(target - position));
     EXPECT_EQ(bullet.getDamage(), 20); // Default damage
-    EXPECT_EQ(bullet.getSpeed(), 6);   // Default speed
-    EXPECT_EQ(bullet.getSize(), Point<float>(10.0f, 20.0f)); // Default size
+    EXPECT_EQ(bullet.getSpeed(), 700);   // Default speed
+    EXPECT_EQ(bullet.getSize(), Point<float>(5.0f, 15.0f)); // Default size
 }
 
 TEST_F(BulletTest, ConstructorWithCustomValues) {

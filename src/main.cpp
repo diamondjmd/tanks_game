@@ -8,11 +8,10 @@
 int main(){
     Point worldSize{1280.f, 960.f};
     auto tank = Tank{Point{600.0f, 30.f}, graphs::Color::YellowOutline};
-    auto player = Player{"Joe", std::move(tank)};
+    auto player = Player{"Player1", std::move(tank)};
 
     Application app("Tanks", worldSize.x, worldSize.y);
     
-
     //World world{worldSize};
     World world{"../resources/maps/map_1.json"};
     

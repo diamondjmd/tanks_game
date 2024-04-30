@@ -17,7 +17,6 @@ inline Point<T> normalize(const Point<T>& vector) {
     return {static_cast<T>(1.0), static_cast<T>(0.0)};
 }
 
-
 template <typename T>
 inline Point<T> rotatePoint(const Point<T>& p, double thetaDegrees) {
     auto thetaRadians = thetaDegrees * M_PI / 180.0;
@@ -26,7 +25,8 @@ inline Point<T> rotatePoint(const Point<T>& p, double thetaDegrees) {
     return {static_cast<T>(p.x * cosTheta), static_cast<T>(p.y * sinTheta)};
 }
 
-int main() {
+void run_benchmark1() {
+    std::cout << "Benchmark1:\n";
     // Create sample Point
     Point<double> samplePoint = {1.0, 2.0};
 
@@ -47,6 +47,4 @@ int main() {
     auto endRotatePoint = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsedRotatePoint = endRotatePoint - startRotatePoint;
     std::cout << "rotatePoint elapsed time: " << elapsedRotatePoint.count() << " seconds\n";
-
-    return 0;
 }

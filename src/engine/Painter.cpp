@@ -71,7 +71,7 @@ void Painter::draw(const Player& player, sf::Sprite& sprite) const{
     // User Name
     sf::Text text;
     text.setFont(CacheManager::getFont("../resources/fonts/Roboto/Roboto-Bold.ttf"));
-    text.setString(player.getName().substr(0, 6));
+    text.setString(player.getName().substr(0, 7));
     text.setCharacterSize(12);
     text.setFillColor(sf::Color::White);
     text.setOrigin(origin);
