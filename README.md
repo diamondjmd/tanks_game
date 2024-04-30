@@ -3,6 +3,8 @@
 ## Description
 Welcome to the thrilling world of Tank Battle, a 2D game programmed in C++ using the SFML library for graphics, Nlohmann json library for dynamic map configuration, and gtest library for testing. The project is structured with CMake version 3.12 and adheres to C++17 standards, ensuring a modern and efficient codebase.
 
+![Tanks 2D C++](https://i.imgur.com/TMi7DfM.gif)
+
 ## Project Minimum Requirements
  - SFML Library
  - Nlohmann json Library
